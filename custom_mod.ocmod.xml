@@ -1,9 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <modification>
 	<name>Journal2 custom fix</name>
-	<version>0.7.4</version>
+	<version>0.7.8</version>
 	<code>jcrfq-mach</code>
 	<author>Machaeon</author>
+
+	<!-- Manufacturer description -->
+	<file path="catalog/view/theme/journal2/template/product/manufacturer_info.tpl">
+		<operation>
+		<search><![CDATA[<?php echo $content_top; ?>]]></search>
+		<add position="after"><![CDATA[
+      <?php if ($thumb || $description) { ?>
+      <div class="category-info">
+        <?php if ($thumb) { ?>
+        <div class="image"><img width="<?php echo $this->journal2->settings->get('config_image_width'); ?>" height="<?php echo $this->journal2->settings->get('config_image_height'); ?>" src="<?php echo $thumb; ?>" alt="<?php echo $heading_title; ?>" /></div>
+        <?php } ?>
+        <?php if ($description) { ?>
+        <?php echo $description; ?>
+        <?php } ?>
+      </div>
+      <?php } ?>
+		]]></add>
+		</operation>
+	</file>
 
 	<!-- Default order by viewed -->
 	<file path="catalog/controller/product/category.php" error="abort">
@@ -91,8 +110,50 @@
 		</operation>
 	</file>
 
+	<!-- Side category menu use titles -->
+	<file path="catalog/controller/module/journal2_side_category.php">
+		<operation>
+			<search><![CDATA[$name = $category_info['name'];]]></search>
+			<add position="replace"><![CDATA[$name = $category_info['meta_title'] ?: $category_info['name'];]]></add>
+		</operation>	
+	</file>
+	<file path="catalog/controller/module/journal2_side_column_menu.php">
+		<operation>
+			<search><![CDATA[$name = $category_info['name'];]]></search>
+			<add position="replace"><![CDATA[$name = $category_info['meta_title'] ?: $category_info['name'];]]></add>
+		</operation>	
+		<operation>
+			<search><![CDATA[$menu['name'] = $category_info['name'];]]></search>
+			<add position="replace"><![CDATA[$menu['name'] = $category_info['meta_title'] ?: $category_info['name'];]]></add>
+		</operation>
+		<operation>
+			<search><![CDATA['name' => $category_info['name'],]]></search>
+			<add position="replace"><![CDATA['name' => $category_info['meta_title'] ?: $category_info['name'],]]></add>
+		</operation>	
+	</file>	
+
 
 	<!-- Improve breadcrumbs -->
+	<file path="catalog/controller/product/product.php">
+		<operation>
+			<search><![CDATA['text' => $product_info['name'],]]></search>
+			<add position="replace"><![CDATA['text' => $product_info['meta_title'] ?: $product_info['name'],]]></add>
+		</operation>
+		<operation>
+			<search><![CDATA['text' => $category_info['name'],]]></search>
+			<add position="replace"><![CDATA['text' => $category_info['meta_title'] ?: $category_info['name'],]]></add>
+		</operation>		
+		<operation>
+			<search><![CDATA['text' => $manufacturer_info['name'],]]></search>
+			<add position="replace"><![CDATA['text' => $manufacturer_info['meta_title'] ?: $manufacturer_info['name'],]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/product/category.php">
+		<operation>
+			<search><![CDATA['text' => $category_info['name'],]]></search>
+			<add position="replace"><![CDATA['text' => $category_info['meta_title'] ?: $category_info['name'],]]></add>
+		</operation>		
+	</file>	
 	<file path="catalog/view/theme/journal2/template/product/product.tpl">
 		<operation>
 			<search><![CDATA[<ul class="breadcrumb">]]></search>
@@ -269,7 +330,14 @@
 		</operation>
 	</file>
 
-	<!-- Add SEO Prefix to categories and products title -->
+	<!-- Add SEO Prefix to categories and products title; generate product description -->
+	<file path="catalog/view/theme/journal2/template/product/product.tpl">
+		<!-- Shema.org -->
+		<operation>
+			<search><![CDATA[<meta itemprop="description" content="<?php echo $this->journal2->settings->get('product_description'); ?>" />]]></search>
+			<add position="replace"><![CDATA[<meta itemprop="description" content="<?php echo (htmlentities(str_replace('&nbsp;', ' ', (trim(preg_replace( '/\s+/', ' ', strip_tags(html_entity_decode($description)))))))); ?>" />]]></add>
+		</operation>
+	</file>
 	<file path="catalog/controller/product/category.php">
 		<operation>
 			<search><![CDATA[$category_info = $this->model_catalog_category->getCategory($category_id);]]></search>
@@ -281,6 +349,10 @@
 		</operation>		
 	</file>
 	<file path="catalog/controller/product/product.php">
+		<operation>
+			<search><![CDATA[$this->document->setDescription($product_info['meta_description']);]]></search>
+			<add position="replace"><![CDATA[$this->document->setDescription($product_info['meta_description'] ?: htmlentities(str_replace('&nbsp;', ' ', (trim(preg_replace( '/\s+/', ' ', strip_tags(html_entity_decode($product_info['description']))))))));]]></add>
+		</operation>
 		<operation>
 			<search><![CDATA[$this->document->setTitle($product_info['name']);]]></search>
 			<add position="replace"><![CDATA[$this->document->setTitle(($category_info['seo_prefix'] ? $category_info['seo_prefix'] . ' ' : '') . $product_info['name']);]]></add>
@@ -430,7 +502,7 @@
 					
 					$isSecure = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? 's' : '';				
 					$url = explode('?', "http{$isSecure}://{$_SERVER['SERVER_NAME']}{$_SERVER['REQUEST_URI']}");
-					$data['canonical'] = $url[0];
+					$data['canonical'] = "http{$isSecure}://{$_SERVER['SERVER_NAME']}{$_SERVER['REQUEST_URI']}";//$url[0];
 				}
 			]]></add>
 		</operation>
