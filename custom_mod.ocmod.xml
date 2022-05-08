@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <modification>
 	<name>Journal2 custom fix</name>
-	<version>0.7.8</version>
+	<version>0.7.9</version>
 	<code>jcrfq-mach</code>
 	<author>Machaeon</author>
 
@@ -358,6 +358,12 @@
 			<add position="replace"><![CDATA[$this->document->setTitle(($category_info['seo_prefix'] ? $category_info['seo_prefix'] . ' ' : '') . $product_info['name']);]]></add>
 		</operation>
 	</file>
+	<file path="admin/controller/catalog/category.php">
+		<operation>
+			<search><![CDATA[$data['entry_layout'] = $this->language->get('entry_layout');]]></search>
+			<add position="after"><![CDATA[$data['entry_seo_prefix'] = $this->language->get('entry_seo_prefix');]]></add>
+		</operation>
+	</file>	
 	<file path="admin/model/catalog/category.php">
 		<operation>
 			<search><![CDATA['description'      => $result['description']]]></search>
@@ -385,6 +391,12 @@
             ]]></add>
 		</operation>
 	</file>
+	<file path="admin/language/ru-ru/catalog/category.php">
+		<operation>
+			<search><![CDATA[// Help]]></search>
+			<add position="before"><![CDATA[$_['entry_seo_prefix']          		= 'SEO префикс:';]]></add>
+		</operation>		
+	</file>	
 
 	<!-- Add SEO Postfix & navigation page numbers to all titles -->
 	<file path="admin/controller/setting/setting.php">
