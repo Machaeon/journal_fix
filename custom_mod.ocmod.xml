@@ -13,11 +13,22 @@
 				<?php
 					if (!empty(array_filter($breadcrumbs, function($el) { return (false !== strpos($el['href'], '/pryazha/')); }))):
 				?>
-				<h2 class="box-heading">Палитра пряжи <?php echo $heading_title ?></h2>
+				<h2 id="color-palette" class="box-heading">Карта цветов пряжи <?php echo $heading_title ?></h2>
 				<?php else: ?>
 				<div class="box-heading">&nbsp;</div>
 				<?php endif; ?>
 					]]></add>
+		</operation>
+		<operation>
+			<search><![CDATA[<li <?php if ($is_active) { echo 'class="active"'; $is_active = false; } ;?>><a href="#tab-description" data-toggle="tab"><?php echo $tab_description; ?></a></li>]]></search>
+			<add position="before"><![CDATA[
+				<?php
+					if (!empty(array_filter($breadcrumbs, function($el) { return (false !== strpos($el['href'], '/pryazha/')); }))):
+				?>
+				<li><h2><a href="<?php echo end($breadcrumbs)['href']; ?>#color-palette">Палитра цветов в наличиии</a></h2></li>
+				<?php endif; ?>
+				]]>				
+			</add>
 		</operation>
 	</file>
 
