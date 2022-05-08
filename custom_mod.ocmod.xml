@@ -5,6 +5,23 @@
 	<code>jcrfq-mach</code>
 	<author>Machaeon</author>
 
+	<!-- Color pallete title -->
+	<file path="catalog/view/theme/journal2/template/product/product.tpl">
+		<operation>
+			<search><![CDATA[<div class="box-heading">&nbsp;</div>]]></search>
+			<add position="replace"><![CDATA[
+				<?php
+					if (!empty(array_filter($breadcrumbs, function($el) { return (false !== strpos($el['href'], '/pryazha/')); }))):
+				?>
+				<h2 class="box-heading">Палитра пряжи <?php echo $heading_title ?></h2>
+				<?php else: ?>
+				<div class="box-heading">&nbsp;</div>
+				<?php endif; ?>
+					]]></add>
+		</operation>
+	</file>
+
+
 	<!-- Manufacturer description -->
 	<file path="catalog/view/theme/journal2/template/product/manufacturer_info.tpl">
 		<operation>
