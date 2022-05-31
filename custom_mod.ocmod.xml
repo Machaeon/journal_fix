@@ -379,7 +379,7 @@
 	<file path="catalog/controller/product/product.php">
 		<operation>
 			<search><![CDATA[$this->document->setDescription($product_info['meta_description']);]]></search>
-			<add position="replace"><![CDATA[$this->document->setDescription($product_info['meta_description'] ?: $this->document->getTitle() . $this->config->get('config_seo_postdesc'));]]></add>
+			<add position="replace"><![CDATA[$this->document->setDescription($product_info['meta_description'] ?: $this->document->getTitle() . ' по низким ценам' . $this->config->get('config_seo_postdesc'));]]></add>
 		</operation>
 		<operation>
 			<search><![CDATA[$this->document->setTitle($product_info['name']);]]></search>
