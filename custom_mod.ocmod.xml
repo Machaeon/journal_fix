@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <modification>
 	<name>Journal2 custom fix</name>
-	<version>0.7.9</version>
+	<version>0.8.0</version>
 	<code>jcrfq-mach</code>
 	<author>Machaeon</author>
 
@@ -379,7 +379,7 @@
 	<file path="catalog/controller/product/product.php">
 		<operation>
 			<search><![CDATA[$this->document->setDescription($product_info['meta_description']);]]></search>
-			<add position="replace"><![CDATA[$this->document->setDescription($product_info['meta_description'] ?: htmlentities(str_replace('&nbsp;', ' ', (trim(preg_replace( '/\s+/', ' ', strip_tags(html_entity_decode($product_info['description']))))))));]]></add>
+			<add position="replace"><![CDATA[$this->document->setDescription($product_info['meta_description'] ?: $this->document->getTitle() . $this->config->get('config_seo_postdesc'));]]></add>
 		</operation>
 		<operation>
 			<search><![CDATA[$this->document->setTitle($product_info['name']);]]></search>
