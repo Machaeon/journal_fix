@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <modification>
 	<name>Journal2 custom fix</name>
-	<version>0.8.1</version>
+	<version>0.9.1</version>
 	<code>jcrfq-mach</code>
 	<author>Machaeon</author>
 
@@ -488,6 +488,7 @@
 	</file>	
 
 	<!-- Add tags to product cards in categories, manufacturers & remove it from product pages -->
+	<!-- H4 to SPAN on manufacturer's page -->
 	<file path="catalog/controller/product/manufacturer.php">
 		<operation>
 			<search><![CDATA['thumb'       => $image,]]></search>
@@ -504,6 +505,10 @@
 		<operation>
 			<search><![CDATA[<h4 class="name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></h4>]]></search>
 			<add position="before"><![CDATA[<?php if (!empty($product['tag'])) {echo "{$product['tag']}<br />";} ?>]]></add>
+		</operation>
+		<operation>
+			<search><![CDATA[<h4 class="name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></h4>]]></search>
+			<add position="replace"><![CDATA[<span class="name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></span>]]></add>
 		</operation>
 	</file>		
 	<file path="catalog/controller/product/category.php">
