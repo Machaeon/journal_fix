@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <modification>
 	<name>Journal2 custom fix</name>
-	<version>0.9.2</version>
+	<version>0.10</version>
 	<code>jcrfq-mach</code>
 	<author>Machaeon</author>
+
+	<!-- MegaMenu H3 to SPAN -->
+	<file path="catalog/view/theme/journal2/template/journal2/menu/main.tpl">
+		<operation>
+			<search><![CDATA[<h3><a href="<?php echo $submenu_item['href']; ?>"><?php echo $submenu_item['name']; ?></a></h3>]]></search>
+			<add position="replace"><![CDATA[<span class="h3"><a href="<?php echo $submenu_item['href']; ?>"><?php echo $submenu_item['name']; ?></a></span>]]></add>
+		</operation>
+	</file>
 
 	<!-- Color pallete title -->
 	<file path="catalog/view/theme/journal2/template/product/product.tpl">
@@ -488,7 +496,7 @@
 	</file>	
 
 	<!-- Add tags to product cards in categories, manufacturers & remove it from product pages -->
-	<!-- H4 to SPAN on manufacturer's page -->
+	<!-- H4 to SPAN on product listing pages -->
 	<file path="catalog/controller/product/manufacturer.php">
 		<operation>
 			<search><![CDATA['thumb'       => $image,]]></search>
@@ -531,7 +539,10 @@
 	<file path="catalog/view/theme/journal2/template/product/category.tpl">
 		<operation>
 			<search><![CDATA[<h4 class="name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></h4>]]></search>
-			<add position="before"><![CDATA[<?php if (!empty($product['tag'])) {echo "{$product['tag']}<br />";} ?>]]></add>
+			<add position="replace"><![CDATA[
+				<?php if (!empty($product['tag'])) {echo "{$product['tag']}<br />";} ?>
+				<span class="name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></span>
+				]]></add>			
 		</operation>
 	</file>		
 
