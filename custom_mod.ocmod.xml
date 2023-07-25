@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <modification>
 	<name>Journal2 custom fix</name>
-	<version>0.11</version>
+	<version>0.12</version>
 	<code>jcrfq-mach</code>
 	<author>Machaeon</author>
 
@@ -487,10 +487,10 @@
 		$page = $this->request->get['page'] ?? 1;
 		$routes = ['product/category', 'product/product', 'product/manufacturer/info'];
 		if ($data['title'] != $this->config->get('config_name')) {            
-            $data['title'] .= (($page > 1) ? " - {$data['text_page']} {$page}" : "") . in_array($this->request->get['route'], $routes) ? $this->config->get('config_seo_postfix') : " | {$this->config->get('config_name')}";
+            $data['title'] .= (($page > 1) ? " - {$data['text_page']} {$page}" : "") . (in_array($this->request->get['route'], $routes) ? $this->config->get('config_seo_postfix') : " | {$this->config->get('config_name')}";
         }
         if ($data['description'] && $page > 1) {
-        	$data['description'] .= " - {$data['text_page']} {$page}";
+        	$data['description'] .= " - {$data['text_page']} {$page}");
         }
             ]]></add>
 		</operation>		
