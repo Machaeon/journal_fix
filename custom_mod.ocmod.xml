@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <modification>
 	<name>Journal2 custom fix</name>
-	<version>0.13</version>
+	<version>0.14</version>
 	<code>jcrfq-mach</code>
 	<author>Machaeon</author>
 
@@ -485,11 +485,16 @@
 			<search><![CDATA[$data['telephone'] = $this->config->get('config_telephone');]]></search>
 			<add position="after"><![CDATA[
 		$page = $this->request->get['page'] ?? 1;
+
+		$keywords = json_decode(html_entity_decode($data['keywords']), true)[$page] ?? ['title' => '', 'description' => ''];
+    $data['title'] = $keywords['title'] ?: $data['title'];
+    $data['description'] = $keywords['description'] ?: $data['description'];
+
 		$routes = ['product/category', 'product/product', 'product/manufacturer/info'];
-		if ($data['title'] != $this->config->get('config_name')) {            
+		if ($data['title'] != $this->config->get('config_name') && empty($keywords['title'])) {
             $data['title'] .= (($page > 1) ? " - {$data['text_page']} {$page}" : "") . (in_array($this->request->get['route'], $routes) ? $this->config->get('config_seo_postfix') : " | {$this->config->get('config_name')}");
         }
-        if ($data['description'] && $page > 1) {
+        if ($data['description'] && $page > 1 && empty($keywords['description'])) {
         	$data['description'] .= " - {$data['text_page']} {$page}";
         }
             ]]></add>
