@@ -1,9 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <modification>
 	<name>Journal2 custom fix</name>
-	<version>0.14</version>
+	<version>0.15</version>
 	<code>jcrfq-mach</code>
 	<author>Machaeon</author>
+
+
+		<!-- Category bottom content after <p class="content-splitter"></p> -->
+		<file path="catalog/view/theme/journal2/template/product/category.tpl">
+		<operation>
+			<search><![CDATA[$description]]></search>
+			<add position="replace"><![CDATA[$description[0]]]></add>
+		</operation>
+		<operation>
+			<search><![CDATA[<?php echo $header; ?>]]></search>
+			<add position="after"><![CDATA[<?php $description = explode('<p class="content-splitter"></p>', $description); ?>]]></add>
+		</operation>
+		<operation>
+			<search><![CDATA[<div class="row pagination">]]></search>
+			<add position="before"><![CDATA[
+      <div class="category-info">
+        <?php if (array_key_exists(1, $description)) { ?>
+        <?php echo $description[1]; ?>
+        <?php } ?>
+      </div>				
+				]]></add>
+		</operation>				
+	</file>
 
 	<!-- MegaMenu H3 to SPAN -->
 	<file path="catalog/view/theme/journal2/template/journal2/menu/main.tpl">
